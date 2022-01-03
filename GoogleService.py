@@ -1,41 +1,46 @@
 import os
 import os.path
-
+import logging
+import json
+import dotenv
+from dotenv import load_dotenv
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from googleapiclient.errors import HttpError
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 
+dotenv_file = dotenv.find_dotenv()
+load_dotenv()
+
 def Create_Service():
-    creds = None
-    # The file token.json stores the user's access and refresh tokens, and is
-    # created automatically when the authorization flow completes for the first # time.
-    SCOPES = ['https://www.googleapis.com/auth/drive']
-
-    if os.path.exists('token.json'):
-        creds = Credentials.from_authorized_user_file('token.json')
-
-    if not creds or not creds.valid:    
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file(
-                    'client_secrets.json', SCOPES)
-            creds = flow.run_local_server()
-
-        # Save the credentials for the next run
-        with open('token.json', 'w') as token:
-            token.write(creds.to_json())
-
     try:
-        service = build('drive', 'v3', credentials=creds)
+        creds = None
+        # The file token.json stores the user's access and refresh tokens, and is
+        # created automatically when the authorization flow completes for the first # time.
+        SCOPES = ['https://www.googleapis.com/auth/drive']
+
+        if os.environ['TOKEN'] is not None:
+            token = json.loads(os.environ['TOKEN'])
+            creds = Credentials.from_authorized_user_info(token,SCOPES)
+            
+        if not creds or not creds.valid:
+            if creds and creds.expired and creds.refresh_token:
+                creds.refresh(Request())
+                
+            else:
+                config = json.loads(os.environ['CREDENTIL'])
+                flow = InstalledAppFlow.from_clent_config(config,SCOPES)
+                
+                creds = flow.run_local_server(port=0)
+                
+            os.environ['TOKEN'] = creds.to_json()
+            
+        service = build('drive','v3',credentials=creds)
         return service
     
-    except HttpError as error:
-        # TODO(developer) - Handle errors from drive API.
-        return error
+    except Exception as e:
+        logging.error(e)
 
 
 

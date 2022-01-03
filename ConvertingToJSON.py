@@ -11,6 +11,6 @@ def convertToJSON(input_path,output_path):
         # Reading clean file 
         data = pd.read_csv(input_path+file)
 
-        fname = file.split('T')[0]+'T'+datetime.now().strftime('%H_%M_%S')
+        fname = file.split('T')[0]+'T'+datetime.now().strftime('%H_%M_%S_%f')
         # Saving the csv file in json format and store inside JSON folder
         data.to_json(output_path+fname+'.json',orient='records')

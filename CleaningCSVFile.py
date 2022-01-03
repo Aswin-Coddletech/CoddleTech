@@ -18,6 +18,6 @@ def cleanCSV(input_path,output_path):
         # Removing Columns having 100% null values
         data.dropna(axis=1,thresh=1,inplace=True)
 
-        fname = file.split('T')[0]+'T'+datetime.now().strftime('%H_%M_%S')+'.csv'
+        fname = file.split('T')[0]+'T'+datetime.now().strftime('%H_%M_%S_%f')+'.csv'
         # Saving the csv file to CSV-UTF8-Clean folder
         data.to_csv(output_path+fname,index=False)

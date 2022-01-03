@@ -13,6 +13,6 @@ def convetToCSV(input_path,output_path):
         print(input_path+file)
         # Reading excel files from Excel folder and removing unwanted columns
         data = pd.read_excel(input_path+file)
-        fname = file.split('T')[0]+'T'+datetime.now().strftime('%H_%M_%S')
+        fname = file.split('T')[0]+'T'+datetime.now().strftime('%H_%M_%S_%f')
         # Converting excel file into csv and encoding to utf-8 format
         data.to_csv(output_path+fname+'.csv',index=False,encoding='utf-8')

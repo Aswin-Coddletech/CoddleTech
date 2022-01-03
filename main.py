@@ -6,7 +6,7 @@ from datetime import datetime
 import os
 
 # Getting Current date
-now = datetime.now().strftime("%Y-%m-%d")
+now = datetime.now().strftime("%F")
 
 # Creating folders according to current data
 try:

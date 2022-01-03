@@ -33,7 +33,7 @@ def getFiles(gdrive_path,now):
             while done is False:
                 status, done = downloader.next_chunk()
                 print("Download %d %%." % int(status.progress() * 100))
-            fname = file_name.split('T')[0]+'T'+datetime.now().strftime('%H_%M_%S')+'.xlsx'
+            fname = file_name.split('T')[0]+'T'+datetime.now().strftime('%H_%M_%S_%f')+'.xlsx'
             fh.seek(0)
             with open(f'01_INPUT_EXCEL/{now}/{fname}','wb') as  f:
                 f.write(fh.read())
